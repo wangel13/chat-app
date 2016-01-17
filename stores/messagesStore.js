@@ -1,7 +1,8 @@
-function Message(msg) {
+function Message(msg, user) {
   return {
+    user   : user.name,
     message: msg,
-    time : new Date()
+    date   : new Date()
   }
 }
 
@@ -11,9 +12,6 @@ function MemoryStorage() {
     messages.push(msg);
   }
 }
-
-// var storage = new MemoryStorage()
-// storage.add(new Message("hello"))
 
 module.exports = {
   MemoryStorage: MemoryStorage,

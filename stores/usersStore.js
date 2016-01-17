@@ -1,18 +1,21 @@
-function User(name, token) {
+function User(name, ws, token) {
   return {
     name  : name,
-    token : token
+    ws    : ws
   }
 }
 
 function UsersStorage() {
   var users = [];
   this.add = function(msg) {
-    messages.push(msg);
+    users.push(msg);
+  }
+  this.get = function() {
+    return users;
   }
 }
 
 module.exports = {
   UsersStorage: UsersStorage,
-  User        : Message
+  User        : User
 };
