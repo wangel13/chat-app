@@ -94,7 +94,16 @@ function spawnNotification(theBody,theIcon,theTitle) {
 }
 
 // Init
-var websocket = new WebSocket('ws://localhost:3000');
+var loc = window.location, new_uri;
+if (loc.protocol === "https:") {
+    new_uri = "wss:";
+} else {
+    new_uri = "ws:";
+}
+new_uri += "//" + loc.host;
+new_uri += loc.pathname + ":3000";
+
+var websocket = new WebSocket(new_uri);
 var login     = new Login(websocket);
 var myChat    = null;
 websocket.onmessage = function(event) {
