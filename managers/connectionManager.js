@@ -9,7 +9,6 @@ function WebSocketConnection(ws, connections, messages, users, id){
 
   ws.on('message', function(message) {
     var parsed = JSON.parse(message)
-
     if (parsed.type === 'login') {
       if(users.get().some(function(arrVal) {return parsed.name === arrVal.name;})) {
         var loginedAnsw = {
@@ -49,11 +48,11 @@ function WebSocketConnection(ws, connections, messages, users, id){
   });
 
   ws.on('close', function() {
+    connections.remove(id);
     if (user !== null) {
       var connectionCloseMsg = {
         message: 'User ' + user.name + ' disconnected from chat...'
       };
-      connections.remove(id);
       users.remove(user);
       messages.add(messageDispatcher.Broadcast(connections, connectionCloseMsg, user, true));
       var onlineMessage = {

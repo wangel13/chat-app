@@ -7,12 +7,11 @@ function LoginView(socket) {
   this.createView = function() {
     document.getElementById('app').innerHTML = '';
     var div = document.createElement('div');
-    div.innerHTML = '<div class="b-loginWindow" id="loginBox"></div>\
+    div.innerHTML = '<div class="b-container b-loginWindow" id="loginBox">\
                      <div class="b-inputMessage">\
                       <input id="login" placeholder="Write your login here & press Enter">\
-                     </div>';
+                     </div></div>';
     document.getElementById('app').appendChild(div);
-
     document.getElementById('login').addEventListener('keydown', function(e) {
       var key = e.which || e.keyCode;
       if (key === 13 && this.value.replace(/^\s+|\s+$/g,'') !== '') { // 13 is enter
@@ -25,35 +24,31 @@ function LoginView(socket) {
       }
     })
   }
-
 }
 
 function Chat(socket) {
-
   var view   = new ChatView(socket);
   view.createView();
   socket.onmessage = function(event) {
-    console.log(event);
     var incomingMessage = JSON.parse(event.data);
     if (incomingMessage.type === 'message') {
       view.renderMessages(incomingMessage);
+      spawnNotification(incomingMessage.message, '/images/envelope.jpg', 'New message in chat');
     } else if (incomingMessage.type === 'online') {
       view.renderStatus(incomingMessage);
     }
   };
-
-
 }
 
 function ChatView(socket) {
   this.createView = function() {
     document.getElementById('app').innerHTML = '';
     var div = document.createElement('div');
-    div.innerHTML = '<div class="b-container"><div class="b-chatWindow" id="messageBox"></div>\
+    div.innerHTML = '<div class="b-container b-flex"><div class="b-flex-item b-flex-item--one"><div class="b-chatWindow" id="messageBox"></div>\
                      <div class="b-inputMessage">\
                       <textarea id="messageSend" rows="8" cols="40" placeholder="Write your message here & press Enter"></textarea>\
-                     </div>\
-                     <div class="b-usersOnline" id="onlineStatus"></div>\
+                     </div></div><div class="b-flex-item b-flex-item--two">\
+                     <div class="b-usersOnline" id="onlineStatus"></div></div>\
                      </div>';
     document.getElementById('app').appendChild(div);
     document.getElementById('messageSend').addEventListener('keydown', function(e) {
@@ -85,7 +80,17 @@ function ChatView(socket) {
       document.getElementById('onlineStatus').appendChild(div);
     });
   }
+}
 
+// notifications
+Notification.requestPermission();
+function spawnNotification(theBody,theIcon,theTitle) {
+  var options = {
+  	body: theBody,
+  	icon: theIcon
+  }
+  var n = new Notification(theTitle,options);
+  setTimeout(n.close.bind(n), 10000);
 }
 
 // Init
