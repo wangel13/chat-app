@@ -5,7 +5,6 @@ var server          = require('http').createServer()
   , wss             = new WebSocketServer({ server: server })
   , express         = require('express')
   , app             = express()
-  , port            = 3000
   , messagesStore   = require('./stores/messagesStore')
   , usersStore      = require('./stores/usersStore')
   , connectionManager = require('./managers/connectionManager')
@@ -17,6 +16,7 @@ var routes = require('./routes/index');
 var messages = new messagesStore.MemoryStorage();
 var users    = new usersStore.UsersStorage();
 
+app.set('port', (process.env.PORT || 3000));
 app.use(express.static('public'));
 
 app.use('/', routes);
@@ -33,6 +33,6 @@ wss.on('connection', function connection(ws) {
 });
 
 server.on('request', app);
-server.listen(port, function () { console.log('Listening on ' + server.address().port) });
+server.listen(app.get('port'), function () { console.log('Listening on ' + server.address().port) });
 
 module.exports = app;
