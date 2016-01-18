@@ -11,6 +11,8 @@ For run, type in terminal:
 
 ```
 $: node app.js
+or
+$: npm start
 ```
 
 and go to localhost:3000

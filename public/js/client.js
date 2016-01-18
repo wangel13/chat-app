@@ -69,7 +69,9 @@ function ChatView(socket) {
     div.className = 'b-message';
     div.innerHTML = '<div class="b-message-item"><b>'+ content.user.name +': </b>'+ content.message +'</div>\
                     <div class="b-message-item">'+ content.date +'</div>';
-    document.getElementById('messageBox').appendChild(div);
+    var messageBox = document.getElementById('messageBox');
+    messageBox.appendChild(div);
+    messageBox.scrollTop = messageBox.scrollHeight;
   };
   this.renderStatus = function(content) {
     document.getElementById('onlineStatus').innerHTML = '';
