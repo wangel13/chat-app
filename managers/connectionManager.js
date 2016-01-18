@@ -30,7 +30,7 @@ function WebSocketConnection(ws, connections, messages, users, id){
         messages.get().forEach(function(item) {
           ws.send(JSON.stringify(item));
         });
-        messages.add(messageDispatcher.Broadcast(connections, connectionMsg, user, true));
+        messages.add(messageDispatcher.BroadcastBot(connections, connectionMsg));
         var onlineMessage = {
           type: 'online',
           users: users.get()
@@ -54,7 +54,7 @@ function WebSocketConnection(ws, connections, messages, users, id){
         message: 'User ' + user.name + ' disconnected from chat...'
       };
       users.remove(user);
-      messages.add(messageDispatcher.Broadcast(connections, connectionCloseMsg, user, true));
+      messages.add(messageDispatcher.BroadcastBot(connections, connectionCloseMsg));
       var onlineMessage = {
         type: 'online',
         users: users.get()

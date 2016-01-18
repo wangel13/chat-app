@@ -1,12 +1,6 @@
 var messagesStore = require('../stores/messagesStore');
 
-function Broadcast(clients, message, user, bot) {
-  if (bot) {
-    var botUser = {
-      name: 'Bot'
-    };
-    user = botUser;
-  }
+function Broadcast(clients, message, user) {
   var sendMessage = new messagesStore.Message(message.message, user);
   clients.get().forEach(function(item) {
     item.ws.send(JSON.stringify(sendMessage));
@@ -14,6 +8,14 @@ function Broadcast(clients, message, user, bot) {
   return sendMessage;
 }
 
+function BroadcastBot(clients, message) {
+  botUser = {
+     name: 'Bot'
+  };
+  Broadcast(clients,message,botUser)
+}
+
 module.exports = {
-  Broadcast: Broadcast
+  Broadcast: Broadcast,
+  BroadcastBot : BroadcastBot
 };
