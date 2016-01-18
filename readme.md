@@ -10,8 +10,8 @@ Dependencies:
 To run, go to project folder and type in terminal:
 
 ```
-$: npm install
-$: npm start
+$ npm install
+$ npm start
 ```
 
 and go to http://localhost:3000
