@@ -1,7 +1,7 @@
-function User(name, ws, token) {
+function User(user) {
   return {
-    name  : name,
-    ws    : ws
+    name      : user.name,
+    createdAt : new Date()
   }
 }
 

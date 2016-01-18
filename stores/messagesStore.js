@@ -1,6 +1,6 @@
 function Message(msg, user) {
   return {
-    user   : user.name,
+    user   : user,
     message: msg,
     date   : new Date()
   }
