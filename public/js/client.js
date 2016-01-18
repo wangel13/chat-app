@@ -33,9 +33,13 @@ function Chat(socket) {
   var view   = new ChatView(socket);
   view.createView();
   socket.onmessage = function(event) {
-    var incomingMessage = event.data;
     console.log(event);
-    view.renderMessages(incomingMessage);
+    var incomingMessage = JSON.parse(event.data);
+    if (incomingMessage.type === 'message') {
+      view.renderMessages(incomingMessage);
+    } else if (incomingMessage.type === 'online') {
+      view.renderStatus(incomingMessage);
+    }
   };
 
 
@@ -45,9 +49,11 @@ function ChatView(socket) {
   this.createView = function() {
     document.getElementById('app').innerHTML = '';
     var div = document.createElement('div');
-    div.innerHTML = '<div class="b-chatWindow" id="messageBox"></div>\
+    div.innerHTML = '<div class="b-container"><div class="b-chatWindow" id="messageBox"></div>\
                      <div class="b-inputMessage">\
                       <textarea id="messageSend" rows="8" cols="40" placeholder="Write your message here & press Enter"></textarea>\
+                     </div>\
+                     <div class="b-usersOnline" id="onlineStatus"></div>\
                      </div>';
     document.getElementById('app').appendChild(div);
     document.getElementById('messageSend').addEventListener('keydown', function(e) {
@@ -64,13 +70,21 @@ function ChatView(socket) {
     })
   }
   this.renderMessages = function(content) {
-    var x = JSON.parse(content);
     var div = document.createElement('div');
     div.className = 'b-message';
-    div.innerHTML = '<div class="b-message-item"><b>'+ x.user.name +': </b>'+ x.message +'</div>\
-                    <div class="b-message-item">'+ x.date +'</div>';
+    div.innerHTML = '<div class="b-message-item"><b>'+ content.user.name +': </b>'+ content.message +'</div>\
+                    <div class="b-message-item">'+ content.date +'</div>';
     document.getElementById('messageBox').appendChild(div);
   };
+  this.renderStatus = function(content) {
+    document.getElementById('onlineStatus').innerHTML = '';
+    content.users.forEach(function(user) {
+      var div = document.createElement('div');
+      div.className = 'b-status';
+      div.innerHTML = '<div class="b-status-item"><b>'+ user.name +'</b></div>';
+      document.getElementById('onlineStatus').appendChild(div);
+    });
+  }
 
 }
 

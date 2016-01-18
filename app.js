@@ -23,10 +23,11 @@ app.use('/', routes);
 
 var connections = new connectionManager.ConnectionStore();
 // WSS
+var id = 0;
 wss.on('connection', function connection(ws) {
-
+  id = id+1;
   console.log('New user connection');
-  var client = new connectionManager.WebSocketConnection(ws, connections, messages, users);
+  var client = new connectionManager.WebSocketConnection(ws, connections, messages, users, id);
   connections.add(client);
 
 });
